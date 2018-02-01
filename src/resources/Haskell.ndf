@@ -1,0 +1,222 @@
+name: Haskell
+scopeName: source.haskell
+repository:
+ block_comment:
+  multi:
+   name: comment.block.haskell
+   begin: \{-(?!#)
+   bcaps: 0=punctuation.definition.comment.haskell
+   end: -\}
+   ecaps: 0=punctuation.definition.comment.haskell
+   patterns:
+    include: #block_comment
+ comments:
+  single:
+   name: comment.line.double-dash.haskell
+   pattern: (--).*$\n?
+   caps: 1=punctuation.definition.comment.haskell
+  single:
+   name: comment.line.triple-bar.haskell
+   pattern: (\|\|\|).*$\n?
+   caps: 1=punctuation.definition.comment.haskell
+  include: #block_comment
+ infix_op:
+  single:
+   name: entity.name.function.infix.haskell
+   pattern: (\([|!%$+:\-.=</>]+\)|\(,+\))
+ module_exports:
+  multi:
+   name: meta.declaration.exports.haskell
+   begin: \(
+   end: \)
+   patterns:
+    single:
+     name: entity.name.function.haskell
+     pattern: \b[a-z][a-zA-Z_'0-9]*
+    single:
+     name: storage.type.haskell
+     pattern: \b[A-Z][A-Za-z_'0-9]*
+    single:
+     name: punctuation.separator.comma.haskell
+     pattern: ,
+    include: #infix_op
+    single:
+     name: meta.other.unknown.haskell
+     pattern: \(.*?\)
+ module_name:
+  single:
+   name: support.other.module.haskell
+   pattern: [A-Z][A-Za-z._']*
+ pragma:
+  multi:
+   name: meta.preprocessor.haskell
+   begin: \{-#
+   end: #-\}
+   patterns:
+    single:
+     name: keyword.other.preprocessor.haskell
+     pattern: \b(LANGUAGE|UNPACK|INLINE)\b
+ type_signature:
+  single:
+   name: meta.class-constraint.haskell
+   pattern: \(\s*([A-Z][A-Za-z]*)\s+([a-z][A-Za-z_']*)\)\s*(=>)
+   caps: 1=entity.other.inherited-class.haskell 2=variable.other.generic-type.haskell 3=keyword.other.big-arrow.haskell
+  include: #pragma
+  single:
+   name: keyword.other.arrow.haskell
+   pattern: ->
+  single:
+   name: keyword.other.big-arrow.haskell
+   pattern: =>
+  single:
+   name: support.type.prelude.haskell
+   pattern: \b(Int(eger)?|Maybe|Either|Bool|Float|Double|Char|String|Ordering|ShowS|ReadS|FilePath|IO(Error)?)\b
+  single:
+   name: variable.other.generic-type.haskell
+   pattern: \b[a-z][a-zA-Z0-9_']*\b
+  single:
+   name: storage.type.haskell
+   pattern: \b[A-Z][a-zA-Z0-9_']*\b
+  single:
+   name: support.constant.unit.haskell
+   pattern: \(\)
+  include: #comments
+patterns:
+ single:
+  name: keyword.operator.function.infix.haskell
+  pattern: (`)[a-zA-Z_']*?(`)
+  caps: 1=punctuation.definition.entity.haskell 2=punctuation.definition.entity.haskell
+ single:
+  name: constant.language.unit.haskell
+  pattern: \(\)
+ single:
+  name: constant.language.empty-list.haskell
+  pattern: \[\]
+ multi:
+  name: meta.declaration.class.haskell
+  begin: \b(class)\b
+  bcaps: 1=keyword.other.haskell
+  end: \b(where)\b
+  ecaps: 1=keyword.other.haskell
+  patterns:
+   single:
+    name: support.class.prelude.haskell
+    pattern: \b(Monad|Functor|Eq|Ord|Read|Show|Num|(Frac|Ra)tional|Enum|Bounded|Real(Frac|Float)?|Integral|Floating)\b
+   single:
+    name: entity.other.inherited-class.haskell
+    pattern: [A-Z][A-Za-z_']*
+   single:
+    name: variable.other.generic-type.haskell
+    pattern: \b[a-z][a-zA-Z0-9_']*\b
+ multi:
+  name: meta.declaration.instance.haskell
+  begin: \b(instance)\b
+  bcaps: 1=keyword.other.haskell
+  end: \b(where)\b|$
+  ecaps: 1=keyword.other.haskell
+  patterns:
+   include: #type_signature
+ multi:
+  name: meta.import.haskell
+  begin: (import)
+  bcaps: 1=keyword.other.haskell
+  end: ($|;)
+  patterns:
+   single:
+    name: keyword.other.haskell
+    pattern: (qualified|as|hiding)
+   include: #module_name
+   include: #module_exports
+ multi:
+  name: meta.deriving.haskell
+  begin: (deriving)\s*\(
+  bcaps: 1=keyword.other.haskell
+  end: \)
+  patterns:
+   single:
+    name: entity.other.inherited-class.haskell
+    pattern: \b[A-Z][a-zA-Z_']*
+ single:
+  name: keyword.other.haskell
+  pattern: \b(deriving|where|data|type|case|of|let|in|newtype|default|public|export|interface|module|namespace)\b
+ single:
+  name: keyword.operator.haskell
+  pattern: \binfix[lr]?\b
+ single:
+  name: keyword.control.haskell
+  pattern: \b(do|if|then|else)\b
+ single:
+  name: constant.numeric.float.haskell
+  pattern: \b([0-9]+\.[0-9]+([eE][+-]?[0-9]+)?|[0-9]+[eE][+-]?[0-9]+)\b
+ single:
+  name: constant.numeric.haskell
+  pattern: \b([0-9]+|0([xX][0-9a-fA-F]+|[oO][0-7]+))\b
+ single:
+  name: meta.preprocessor.c
+  pattern: ^\s*(#)\s*\w+
+  caps: 1=punctuation.definition.preprocessor.c
+ include: #pragma
+ multi:
+  name: string.quoted.double.haskell
+  begin: "
+  bcaps: 0=punctuation.definition.string.begin.haskell
+  end: "
+  ecaps: 0=punctuation.definition.string.end.haskell
+  patterns:
+   single:
+    name: constant.character.escape.haskell
+    pattern: \\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\"'\&])
+   single:
+    name: constant.character.escape.octal.haskell
+    pattern: \\o[0-7]+|\\x[0-9A-Fa-f]+|\\[0-9]+
+   single:
+    name: constant.character.escape.control.haskell
+    pattern: \^[A-Z@\[\]\\\^_]
+ single:
+  name: string.quoted.single.haskell
+  pattern: (?x)\
+   (')\
+   (?:\
+    [\ -\[\]-~]        # Basic Char\
+     | (\\(?:NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE\
+     |DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS\
+     |US|SP|DEL|[abfnrtv\\\"'\&]))  # Escapes\
+     | (\\o[0-7]+)        # Octal Escapes\
+     | (\\x[0-9A-Fa-f]+)      # Hexadecimal Escapes\
+     | (\^[A-Z@\[\]\\\^_])      # Control Chars\
+   )\
+   (')
+  caps: 1=punctuation.definition.string.begin.haskell 2=constant.character.escape.haskell 3=constant.character.escape.octal.haskell 4=constant.character.escape.hexadecimal.haskell 5=constant.character.escape.control.haskell 6=punctuation.definition.string.end.haskell
+ multi:
+  name: meta.function.type-declaration.haskell
+  begin: ^\s*([a-z_][a-zA-Z0-9_']*|\([|!%$+\-.,=</>]+\))\s*(::)
+  bcaps: 1=entity.name.function.haskell 2=keyword.other.double-colon.haskell
+  end: $\n?
+  patterns:
+   include: #type_signature
+ single:
+  name: support.constant.haskell
+  pattern: \b(Just|Nothing|Left|Right|True|False|LT|EQ|GT|\(\)|\[\])\b
+ single:
+  name: entity.name.type.haskell
+  pattern: \b[A-Z]\w*\b
+ include: #comments
+ single:
+  name: support.function.prelude.haskell
+  pattern: \b(abs|acos|acosh|all|and|any|appendFile|applyM|asTypeOf|asin|asinh|atan|atan2|atanh|break|catch|ceiling|compare|concat|concatMap|const|cos|cosh|curry|cycle|decodeFloat|div|divMod|drop|dropWhile|elem|encodeFloat|enumFrom|enumFromThen|enumFromThenTo|enumFromTo|error|even|exp|exponent|fail|filter|flip|floatDigits|floatRadix|floatRange|floor|fmap|foldl|foldl1|foldr|foldr1|fromEnum|fromInteger|fromIntegral|fromRational|fst|gcd|getChar|getContents|getLine|head|id|init|interact|ioError|isDenormalized|isIEEE|isInfinite|isNaN|isNegativeZero|iterate|last|lcm|length|lex|lines|log|logBase|lookup|map|mapM|mapM_|max|maxBound|maximum|maybe|min|minBound|minimum|mod|negate|not|notElem|null|odd|or|otherwise|pi|pred|print|product|properFraction|putChar|putStr|putStrLn|quot|quotRem|read|readFile|readIO|readList|readLn|readParen|reads|readsPrec|realToFrac|recip|rem|repeat|replicate|return|reverse|round|scaleFloat|scanl|scanl1|scanr|scanr1|seq|sequence|sequence_|show|showChar|showList|showParen|showString|shows|showsPrec|significand|signum|sin|sinh|snd|span|splitAt|sqrt|subtract|succ|sum|tail|take|takeWhile|tan|tanh|toEnum|toInteger|toRational|truncate|uncurry|undefined|unlines|until|unwords|unzip|unzip3|userError|words|writeFile|zip|zip3|zipWith|zipWith3)\b
+ include: #infix_op
+ single:
+  name: keyword.operator.haskell
+  pattern: [!$?~+:\-.=</>\\]+
+ single:
+  name: keyword.operator.haskell
+  pattern: %(?:\W)
+ single:
+  name: keyword.operator.haskell
+  pattern: \|(?:[^\|])
+ single:
+  name: punctuation.separator.comma.haskell
+  pattern: ,
+ single:
+  name: keyword.directive.haskell
+  pattern: %(\w+)

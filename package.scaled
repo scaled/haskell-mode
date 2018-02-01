@@ -1,0 +1,7 @@
+   name: haskell-mode
+ source: git:https://github.com/scaled/haskell-mode.git
+version: 1.0
+descrip: Provides support for editing Haskell code.
+ weburl: https://github.com/scaled/haskell-mode
+license: New BSD
+ depend: git:https://github.com/scaled/textmate-grammar.git
