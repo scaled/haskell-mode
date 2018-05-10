@@ -17,9 +17,10 @@ class HaskellGrammarPlugin extends GrammarPlugin {
   override def grammars = Map("source.haskell" -> "Haskell.ndf")
 
   override def effacers = List(
+    effacer("comment.line.dd-bar", docStyle),
+    effacer("comment.line.triple-bar", docStyle),
     effacer("comment.line", commentStyle),
     effacer("comment.block.string", stringStyle),
-    effacer("comment.line.triple-bar", docStyle),
     effacer("constant", constantStyle),
     effacer("invalid", warnStyle),
     effacer("keyword.directive", moduleStyle),
@@ -31,6 +32,15 @@ class HaskellGrammarPlugin extends GrammarPlugin {
     effacer("entity.name.type", typeStyle),
     effacer("support.other.module", moduleStyle),
     effacer("storage", variableStyle)
+  )
+
+  override def syntaxers = List(
+    syntaxer("comment.line.triple-bar", Syntax.DocComment),
+    syntaxer("comment.line.dd-bar", Syntax.DocComment),
+    syntaxer("comment.line", Syntax.LineComment),
+    syntaxer("constant", Syntax.OtherLiteral),
+    syntaxer("string.quoted.triple", Syntax.HereDocLiteral),
+    syntaxer("string", Syntax.StringLiteral)
   )
 }
 
@@ -55,6 +65,7 @@ class HaskellMode (env :Env) extends GrammarCodeMode(env) {
     override def blockOpen = ""
     override def blockClose = ""
     override def blockPrefix = ""
-    override def docPrefix   = "|||"
+    override def docOpen   = "-- |"
+    override def docPrefix   = "-- |"
   }
 }

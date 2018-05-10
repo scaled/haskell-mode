@@ -12,6 +12,10 @@ repository:
     include: #block_comment
  comments:
   single:
+   name: comment.line.dd-bar.haskell
+   pattern: (-- \|).*$\n?
+   caps: 1=punctuation.definition.comment.haskell
+  single:
    name: comment.line.double-dash.haskell
    pattern: (--).*$\n?
    caps: 1=punctuation.definition.comment.haskell
